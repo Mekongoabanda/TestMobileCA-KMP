@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TestMobileCAKMP</string>
+    <string name="loading_bank">Loading your bank accounts…</string>
+    <string name="credit_agricole">Crédit Agricole</string>
+    <string name="others_banks">Other banks</string>
+    <string name="my_accounts">My Accounts</string>
+    <string name="unable_to_read_data">Unable to read bank data.</string>
+    <string name="retry">Retry</string>
+    <string name="no_data_from_server">No data received from the server.</string>
+    <string name="is_not_a_valid_url">Is not a valid URL</string>
+    <string name="simulation">Simulation</string>
+    <string name="up_to_you">Up to you</string>
+</resources>
