@@ -14,7 +14,6 @@ struct BanksListView: View {
     )
 
     var body: some View {
-
         Group {
             // SKIE converts Kotlin sealed classes to Swift enums → native switch/case
             switch onEnum(of: viewModel.state) {
@@ -37,7 +36,6 @@ struct BanksListView: View {
                     if !otherBanks.isEmpty {
                         bankView(banks: otherBanks, isCA: false)
                     }
-
                 }.listStyle(.plain)
             }
         }.task {
@@ -95,6 +93,6 @@ struct BanksListView: View {
     }
 }
 
-#Preview() {
+#Preview {
     BanksListView()
 }

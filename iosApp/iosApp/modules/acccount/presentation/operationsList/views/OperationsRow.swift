@@ -34,7 +34,6 @@ struct OperationsRow: View {
 }
 
 #Preview {
-
     OperationsRow(
         operation: shared.Operation(
             id: "2", title: "Prélèvement Netflix", amount: "-15.99", date: "20/02/2026",

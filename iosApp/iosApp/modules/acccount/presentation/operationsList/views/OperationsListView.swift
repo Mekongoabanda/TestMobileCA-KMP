@@ -12,7 +12,6 @@ struct OperationsListView: View {
     @Environment(\.dismiss) private var dismiss
     var account: Account
     var body: some View {
-
         VStack {
             VStack(spacing: 10) {
                 Text(account.balance, format: .currency(code: "EUR"))

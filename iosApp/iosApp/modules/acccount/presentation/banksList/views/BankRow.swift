@@ -9,7 +9,7 @@ import shared
 
 struct BankRow: View {
     let bank: Bank
-    
+
     var body: some View {
         HStack {
             Text(bank.name)
@@ -22,5 +22,5 @@ struct BankRow: View {
 }
 
 #Preview {
-    BankRow(bank: Bank( name: "Crédit Agricole", isCA: true, accounts: [Account]()))
+    BankRow(bank: Bank(name: "Crédit Agricole", isCA: true, accounts: [Account]()))
 }

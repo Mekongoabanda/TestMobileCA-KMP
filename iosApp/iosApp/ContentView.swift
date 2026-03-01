@@ -3,15 +3,13 @@ import SwiftUI
 struct ContentView: View {
     @State var currentTab: Int = 0
     var body: some View {
-
         TabView(selection: $currentTab) {
             // 0
             myAccountTab().tag(0)
             // 1
-            SimulationTab().tag(1)
+            simulationTab().tag(1)
             // 2
             upToYouTab().tag(2)
-
         }
     }
 
@@ -25,7 +23,7 @@ struct ContentView: View {
     }
 
     @ViewBuilder
-    func SimulationTab() -> some View {
+    func simulationTab() -> some View {
         NavigationStack {
             Text(String(localized: "simulation")).navigationTitle(String(localized: "simulation"))
         }.tabItem {

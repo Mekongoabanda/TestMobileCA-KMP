@@ -14,5 +14,5 @@ extension Bank: @retroactive Identifiable {
 extension shared.Operation: @retroactive Identifiable {
 }
 
-extension Account: @retroactive Identifiable{
+extension Account: @retroactive Identifiable {
 }
