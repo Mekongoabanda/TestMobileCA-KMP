@@ -10,10 +10,10 @@ import com.example.testmobileca_kmp.R
 
 /** Bottom tab bar destinations — mirrors iOS `ContentView`'s `TabView`. */
 enum class AppTab(
-        val route: String,
-        val labelResId: Int,
-        val selectedIcon: ImageVector,
-        val unselectedIcon: ImageVector
+    val route: String,
+    val labelResId: Int,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector
 ) {
     MY_ACCOUNTS("myAccounts", R.string.my_accounts, Icons.Filled.Person, Icons.Outlined.Person),
     SIMULATION("simulation", R.string.simulation, Icons.Filled.Star, Icons.Outlined.Star),

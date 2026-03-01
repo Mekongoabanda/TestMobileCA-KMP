@@ -16,9 +16,9 @@ import com.example.testmobileca_kmp.modules.account.domain.entities.Bank
 fun BankRow(bank: Bank, modifier: Modifier = Modifier) {
     Row(modifier = modifier.padding(vertical = 4.dp)) {
         Text(
-                text = bank.name,
-                style = MaterialTheme.typography.bodyMedium,
-                color = AppColors.bankAccountTitle
+            text = bank.name,
+            style = MaterialTheme.typography.bodyMedium,
+            color = AppColors.bankAccountTitle
         )
     }
 }

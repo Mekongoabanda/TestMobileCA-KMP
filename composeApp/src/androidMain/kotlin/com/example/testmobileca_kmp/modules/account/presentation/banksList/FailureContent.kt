@@ -18,29 +18,29 @@ import com.example.testmobileca_kmp.core.theme.AppColors
 fun FailureContent(errorMessage: String, onRetry: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(32.dp)
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(32.dp)
         ) {
             Icon(
-                    imageVector = Icons.Filled.Warning,
-                    contentDescription = null,
-                    modifier = Modifier.size(50.dp),
-                    tint = AppColors.errorRed
+                imageVector = Icons.Filled.Warning,
+                contentDescription = null,
+                modifier = Modifier.size(50.dp),
+                tint = AppColors.errorRed
             )
             Text(
-                    text = stringResource(R.string.unable_to_read_data),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = AppColors.bankAccountTitle
+                text = stringResource(R.string.unable_to_read_data),
+                style = MaterialTheme.typography.titleMedium,
+                color = AppColors.bankAccountTitle
             )
             Text(
-                    text = errorMessage,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = AppColors.sectionHeader
+                text = errorMessage,
+                style = MaterialTheme.typography.bodyMedium,
+                color = AppColors.sectionHeader
             )
             Button(
-                    onClick = onRetry,
-                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.caGreen)
+                onClick = onRetry,
+                colors = ButtonDefaults.buttonColors(containerColor = AppColors.caGreen)
             ) { Text(stringResource(R.string.retry)) }
         }
     }

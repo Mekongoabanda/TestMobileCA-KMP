@@ -19,22 +19,22 @@ fun AppBottomBar(currentRoute: String?, onTabSelected: (AppTab) -> Unit) {
         AppTab.entries.forEach { tab ->
             val selected = currentRoute == tab.route
             NavigationBarItem(
-                    selected = selected,
-                    onClick = { if (!selected) onTabSelected(tab) },
-                    icon = {
-                        Icon(
-                                imageVector =
-                                        if (selected) tab.selectedIcon else tab.unselectedIcon,
-                                contentDescription = stringResource(tab.labelResId)
-                        )
-                    },
-                    label = { Text(stringResource(tab.labelResId)) },
-                    colors =
-                            NavigationBarItemDefaults.colors(
-                                    selectedIconColor = AppColors.caGreen,
-                                    selectedTextColor = AppColors.caGreen,
-                                    indicatorColor = AppColors.caGreen.copy(alpha = 0.1f)
-                            )
+                selected = selected,
+                onClick = { if (!selected) onTabSelected(tab) },
+                icon = {
+                    Icon(
+                        imageVector =
+                        if (selected) tab.selectedIcon else tab.unselectedIcon,
+                        contentDescription = stringResource(tab.labelResId)
+                    )
+                },
+                label = { Text(stringResource(tab.labelResId)) },
+                colors =
+                NavigationBarItemDefaults.colors(
+                    selectedIconColor = AppColors.caGreen,
+                    selectedTextColor = AppColors.caGreen,
+                    indicatorColor = AppColors.caGreen.copy(alpha = 0.1f)
+                )
             )
         }
     }

@@ -29,10 +29,10 @@ class BanksListViewModel(private val getSortedBanksUseCase: GetSortedBanksUseCas
         viewModelScope.launch {
             val result = getSortedBanksUseCase.execute()
             result
-                    .onSuccess { banks -> _viewState.value = BanksListState.Success(banks) }
-                    .onFailure { error ->
-                        _viewState.value = BanksListState.Failure(error.message ?: "Unknown error")
-                    }
+                .onSuccess { banks -> _viewState.value = BanksListState.Success(banks) }
+                .onFailure { error ->
+                    _viewState.value = BanksListState.Failure(error.message ?: "Unknown error")
+                }
         }
     }
 }

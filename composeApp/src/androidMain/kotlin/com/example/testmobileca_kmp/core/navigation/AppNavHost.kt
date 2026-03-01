@@ -25,23 +25,23 @@ import com.example.testmobileca_kmp.modules.account.presentation.operationsList.
  */
 @Composable
 fun AppNavHost(
-        navController: NavHostController,
-        paddingValues: PaddingValues,
-        onAccountSelected: (Account) -> Unit,
-        getSelectedAccount: () -> Account?
+    navController: NavHostController,
+    paddingValues: PaddingValues,
+    onAccountSelected: (Account) -> Unit,
+    getSelectedAccount: () -> Account?
 ) {
     NavHost(
-            navController = navController,
-            startDestination = AppTab.MY_ACCOUNTS.route,
-            modifier = Modifier.fillMaxSize().padding(paddingValues)
+        navController = navController,
+        startDestination = AppTab.MY_ACCOUNTS.route,
+        modifier = Modifier.fillMaxSize().padding(paddingValues)
     ) {
         // Tab 1 — My Accounts
         composable(AppTab.MY_ACCOUNTS.route) {
             BanksListScreen(
-                    onAccountClick = { account ->
-                        onAccountSelected(account)
-                        navController.navigate("operationsList")
-                    }
+                onAccountClick = { account ->
+                    onAccountSelected(account)
+                    navController.navigate("operationsList")
+                }
             )
         }
 
@@ -57,8 +57,8 @@ fun AppNavHost(
         composable("operationsList") {
             getSelectedAccount()?.let { account ->
                 OperationsListScreen(
-                        account = account,
-                        onBackClick = { navController.popBackStack() }
+                    account = account,
+                    onBackClick = { navController.popBackStack() }
                 )
             }
         }
@@ -69,9 +69,9 @@ fun AppNavHost(
 private fun PlaceholderScreen(title: String) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
-                text = title,
-                style = MaterialTheme.typography.headlineMedium,
-                color = AppColors.sectionHeader
+            text = title,
+            style = MaterialTheme.typography.headlineMedium,
+            color = AppColors.sectionHeader
         )
     }
 }

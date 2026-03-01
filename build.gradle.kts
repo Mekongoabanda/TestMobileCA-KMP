@@ -6,4 +6,21 @@ plugins {
     alias(libs.plugins.composeMultiplatform) apply false
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.ktlint)
+}
+
+// Apply ktlint to all subprojects
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+
+    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        android.set(true)
+        verbose.set(true)
+        outputToConsole.set(true)
+        // Exclude generated code (Compose resource generator, etc.)
+        filter {
+            exclude("**/generated/**")
+            exclude("**/build/**")
+        }
+    }
 }

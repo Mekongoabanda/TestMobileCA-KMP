@@ -30,22 +30,19 @@ import com.example.testmobileca_kmp.modules.account.presentation.banksList.viewm
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun BanksListScreen(
-        viewModel: BanksListViewModel = koinViewModel(),
-        onAccountClick: (Account) -> Unit
-) {
+fun BanksListScreen(viewModel: BanksListViewModel = koinViewModel(), onAccountClick: (Account) -> Unit) {
     val state by viewModel.viewState.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize().background(AppColors.backgroundScreen)) {
         when (val currentState = state) {
             is BanksListState.Loading -> LoadingContent()
             is BanksListState.Failure ->
-                    FailureContent(
-                            errorMessage = currentState.error,
-                            onRetry = { viewModel.fetchBanks() }
-                    )
+                FailureContent(
+                    errorMessage = currentState.error,
+                    onRetry = { viewModel.fetchBanks() }
+                )
             is BanksListState.Success ->
-                    BanksContent(banks = currentState.banks, onAccountClick = onAccountClick)
+                BanksContent(banks = currentState.banks, onAccountClick = onAccountClick)
         }
     }
 }
@@ -67,17 +64,14 @@ private fun BanksContent(banks: List<Bank>, onAccountClick: (Account) -> Unit) {
     }
 }
 
-private fun LazyListScope.bankSection(
-        banks: List<Bank>,
-        isCA: Boolean,
-        onAccountClick: (Account) -> Unit
-) {
+private fun LazyListScope.bankSection(banks: List<Bank>, isCA: Boolean, onAccountClick: (Account) -> Unit) {
     val title = if (isCA) R.string.credit_agricole else R.string.others_banks
     val iconColor = if (isCA) AppColors.caGreen else AppColors.otherBankGray
     val keyPrefix = if (isCA) "ca" else "other"
 
     item(key = "${keyPrefix}_header") {
-        SectionHeader(title = title, iconColor = iconColor) }
+        SectionHeader(title = title, iconColor = iconColor)
+    }
     banks.forEach { bank ->
         item(key = "${keyPrefix}_bank_${bank.name}") {
             ExpandableBankRow(bank = bank, onAccountClick = onAccountClick)
@@ -88,20 +82,20 @@ private fun LazyListScope.bankSection(
 @Composable
 private fun SectionHeader(title: Int, iconColor: Color) {
     Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Icon(
-                imageVector = Icons.Outlined.AccountBalance,
-                contentDescription = null,
-                tint = iconColor,
-                modifier = Modifier.size(24.dp)
+            imageVector = Icons.Outlined.AccountBalance,
+            contentDescription = null,
+            tint = iconColor,
+            modifier = Modifier.size(24.dp)
         )
         Text(
-                text = stringResource(title),
-                style = MaterialTheme.typography.titleMedium,
-                color = AppColors.sectionHeader
+            text = stringResource(title),
+            style = MaterialTheme.typography.titleMedium,
+            color = AppColors.sectionHeader
         )
     }
 }
@@ -112,38 +106,41 @@ private fun ExpandableBankRow(bank: Bank, onAccountClick: (Account) -> Unit) {
 
     Column {
         Row(
-                modifier =
-                        Modifier.fillMaxWidth()
-                                .clickable { expanded = !expanded }
-                                .padding(horizontal = 16.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
+            modifier =
+            Modifier.fillMaxWidth()
+                .clickable { expanded = !expanded }
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             BankRow(bank = bank, modifier = Modifier.weight(1f))
             Icon(
-                    imageVector =
-                            if (expanded) Icons.Outlined.KeyboardArrowUp
-                            else Icons.Outlined.KeyboardArrowDown,
-                    contentDescription = null,
-                    tint = AppColors.sectionHeader
+                imageVector =
+                if (expanded) {
+                    Icons.Outlined.KeyboardArrowUp
+                } else {
+                    Icons.Outlined.KeyboardArrowDown
+                },
+                contentDescription = null,
+                tint = AppColors.sectionHeader
             )
         }
 
         AnimatedVisibility(
-                visible = expanded,
-                enter = expandVertically(),
-                exit = shrinkVertically()
+            visible = expanded,
+            enter = expandVertically(),
+            exit = shrinkVertically()
         ) {
             Column {
                 bank.accounts.forEachIndexed { index, account ->
                     AccountRow(
-                            account = account,
-                            onClick = { onAccountClick(account) },
-                            modifier = Modifier.padding(start = 32.dp, end = 16.dp)
+                        account = account,
+                        onClick = { onAccountClick(account) },
+                        modifier = Modifier.padding(start = 32.dp, end = 16.dp)
                     )
                     if (index < bank.accounts.lastIndex) {
                         HorizontalDivider(
-                                modifier = Modifier.padding(start = 32.dp, end = 16.dp),
-                                color = AppColors.divider
+                            modifier = Modifier.padding(start = 32.dp, end = 16.dp),
+                            color = AppColors.divider
                         )
                     }
                 }
@@ -159,4 +156,3 @@ private fun ExpandableBankRow(bank: Bank, onAccountClick: (Account) -> Unit) {
 private fun BanksListSuccessPreview() {
     BanksContent(banks = PreviewData.banks, onAccountClick = {})
 }
-

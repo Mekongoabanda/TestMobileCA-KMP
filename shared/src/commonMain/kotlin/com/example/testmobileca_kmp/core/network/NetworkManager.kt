@@ -11,11 +11,11 @@ object NetworkManager {
     val client = HttpClient {
         install(ContentNegotiation) {
             json(
-                    Json {
-                        prettyPrint = true
-                        isLenient = true
-                        ignoreUnknownKeys = true
-                    }
+                Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                }
             )
         }
     }

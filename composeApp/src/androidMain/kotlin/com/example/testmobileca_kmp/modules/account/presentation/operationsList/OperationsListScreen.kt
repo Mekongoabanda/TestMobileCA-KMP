@@ -22,43 +22,43 @@ import com.example.testmobileca_kmp.modules.account.domain.entities.Account
 @Composable
 fun OperationsListScreen(account: Account, onBackClick: () -> Unit) {
     Scaffold(
-            topBar = {
-                TopAppBar(
-                        title = { Text(stringResource(R.string.my_accounts)) },
-                        navigationIcon = {
-                            IconButton(onClick = onBackClick) {
-                                Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                        contentDescription = stringResource(R.string.my_accounts)
-                                )
-                            }
-                        },
-                        colors =
-                                TopAppBarDefaults.topAppBarColors(
-                                        containerColor = AppColors.backgroundScreen
-                                )
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.my_accounts)) },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.my_accounts)
+                        )
+                    }
+                },
+                colors =
+                TopAppBarDefaults.topAppBarColors(
+                    containerColor = AppColors.backgroundScreen
                 )
-            },
-            containerColor = AppColors.backgroundScreen
+            )
+        },
+        containerColor = AppColors.backgroundScreen
     ) { paddingValues ->
         Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues),
-                horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Balance
             Text(
-                    text = account.balance.toCurrencyString(),
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = AppColors.bankAccountAmount,
-                    modifier = Modifier.padding(top = 16.dp)
+                text = account.balance.toCurrencyString(),
+                style = MaterialTheme.typography.headlineLarge,
+                color = AppColors.bankAccountAmount,
+                modifier = Modifier.padding(top = 16.dp)
             )
 
             // Account label
             Text(
-                    text = account.label,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = AppColors.bankAccountTitle,
-                    modifier = Modifier.padding(top = 8.dp, bottom = 24.dp)
+                text = account.label,
+                style = MaterialTheme.typography.titleLarge,
+                color = AppColors.bankAccountTitle,
+                modifier = Modifier.padding(top = 8.dp, bottom = 24.dp)
             )
 
             // Operations list
@@ -75,10 +75,10 @@ fun OperationsListScreen(account: Account, onBackClick: () -> Unit) {
 private fun EmptyOperationsMessage() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
-                text = "Aucune opération",
-                style = MaterialTheme.typography.bodyMedium,
-                color = AppColors.sectionHeader,
-                textAlign = TextAlign.Center
+            text = "Aucune opération",
+            style = MaterialTheme.typography.bodyMedium,
+            color = AppColors.sectionHeader,
+            textAlign = TextAlign.Center
         )
     }
 }
@@ -86,12 +86,12 @@ private fun EmptyOperationsMessage() {
 @Composable
 private fun OperationsList(account: Account) {
     LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 20.dp)
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(horizontal = 20.dp)
     ) {
         items(
-                count = account.operations.size,
-                key = { index -> "${index}_${account.operations[index].id}" }
+            count = account.operations.size,
+            key = { index -> "${index}_${account.operations[index].id}" }
         ) { index ->
             OperationRow(operation = account.operations[index])
             HorizontalDivider(color = AppColors.divider)

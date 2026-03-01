@@ -16,29 +16,29 @@ import com.example.testmobileca_kmp.modules.account.domain.entities.Account
 
 @Composable
 fun AccountRow(account: Account, onClick: () -> Unit, modifier: Modifier = Modifier) {
-        Row(
-                modifier =
-                        modifier.fillMaxWidth()
-                                .clickable(onClick = onClick)
-                                .padding(vertical = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-        ) {
-                Text(
-                        text = account.label,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = AppColors.accountTitle
-                )
-                Text(
-                        text = account.balance.toCurrencyString(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = AppColors.bankAccountAmount
-                )
-        }
+    Row(
+        modifier =
+        modifier.fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = account.label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = AppColors.accountTitle
+        )
+        Text(
+            text = account.balance.toCurrencyString(),
+            style = MaterialTheme.typography.bodyMedium,
+            color = AppColors.bankAccountAmount
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun AccountRowPreview() {
-        AccountRow(account = PreviewData.accounts.first(), onClick = {})
+    AccountRow(account = PreviewData.accounts.first(), onClick = {})
 }

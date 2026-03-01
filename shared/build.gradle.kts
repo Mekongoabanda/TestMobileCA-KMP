@@ -13,7 +13,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -23,7 +23,7 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         commonMain.dependencies {
             // put your Multiplatform dependencies here
@@ -42,6 +42,7 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }

@@ -25,40 +25,40 @@ fun App() {
         var selectedAccount by remember { mutableStateOf<Account?>(null) }
 
         Scaffold(
-                topBar = {
-                    if (currentTab != null) {
-                        TopAppBar(
-                                title = {
-                                    Text(
-                                            text = stringResource(currentTab.labelResId),
-                                            style = MaterialTheme.typography.headlineMedium
-                                    )
-                                },
-                                colors =
-                                        TopAppBarDefaults.topAppBarColors(
-                                                containerColor = AppColors.backgroundScreen
-                                        )
+            topBar = {
+                if (currentTab != null) {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = stringResource(currentTab.labelResId),
+                                style = MaterialTheme.typography.headlineMedium
+                            )
+                        },
+                        colors =
+                        TopAppBarDefaults.topAppBarColors(
+                            containerColor = AppColors.backgroundScreen
                         )
-                    }
-                },
-                bottomBar = {
-                    if (currentTab != null) {
-                        AppBottomBar(currentRoute = currentRoute) { tab ->
-                            navController.navigate(tab.route) {
-                                popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                    )
+                }
+            },
+            bottomBar = {
+                if (currentTab != null) {
+                    AppBottomBar(currentRoute = currentRoute) { tab ->
+                        navController.navigate(tab.route) {
+                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
                         }
                     }
-                },
-                containerColor = AppColors.backgroundScreen
+                }
+            },
+            containerColor = AppColors.backgroundScreen
         ) { paddingValues ->
             AppNavHost(
-                    navController = navController,
-                    paddingValues = paddingValues,
-                    onAccountSelected = { selectedAccount = it },
-                    getSelectedAccount = { selectedAccount }
+                navController = navController,
+                paddingValues = paddingValues,
+                onAccountSelected = { selectedAccount = it },
+                getSelectedAccount = { selectedAccount }
             )
         }
     }

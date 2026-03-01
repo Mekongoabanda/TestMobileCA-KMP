@@ -1,0 +1,36 @@
+# EditorConfig — ktlint reads these rules
+# https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 120
+
+[*.{kt,kts}]
+# ktlint specific rules
+ktlint_code_style = android_studio
+
+# Disable wildcard import rule — Compose uses them extensively
+ktlint_standard_no-wildcard-imports = disabled
+
+# Disable filename rule — AppColors in Color.kt is intentional
+ktlint_standard_filename = disabled
+
+# Allow trailing commas (modern Kotlin style)
+ktlint_standard_trailing-comma-on-call-site = disabled
+ktlint_standard_trailing-comma-on-declaration-site = disabled
+
+# Disable function naming rule for tests (backtick names)
+ktlint_standard_function-naming = disabled
+
+# Disable package naming rule — project uses underscores in package name
+ktlint_standard_package-name = disabled
+
+[*.xml]
+indent_size = 4

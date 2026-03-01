@@ -18,9 +18,9 @@ fun LoadingContent() {
             CircularProgressIndicator(color = AppColors.caGreen)
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                    text = stringResource(R.string.loading_bank),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = AppColors.sectionHeader
+                text = stringResource(R.string.loading_bank),
+                style = MaterialTheme.typography.bodyMedium,
+                color = AppColors.sectionHeader
             )
         }
     }

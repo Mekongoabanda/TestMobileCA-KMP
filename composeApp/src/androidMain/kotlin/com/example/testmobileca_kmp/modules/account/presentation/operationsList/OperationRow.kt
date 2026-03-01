@@ -15,34 +15,34 @@ import com.example.testmobileca_kmp.modules.account.domain.entities.Operation
 
 @Composable
 fun OperationRow(operation: Operation) {
-        Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-        ) {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(
-                                text = operation.title,
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.SemiBold,
-                                color = AppColors.bankAccountTitle
-                        )
-                        Text(
-                                text = operation.date,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = AppColors.sectionHeader
-                        )
-                }
-                Text(
-                        text = operation.amount,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = AppColors.bankAccountAmount
-                )
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                text = operation.title,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = AppColors.bankAccountTitle
+            )
+            Text(
+                text = operation.date,
+                style = MaterialTheme.typography.bodySmall,
+                color = AppColors.sectionHeader
+            )
         }
+        Text(
+            text = operation.amount,
+            style = MaterialTheme.typography.bodyMedium,
+            color = AppColors.bankAccountAmount
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun OperationRowPreview() {
-        OperationRow(operation = PreviewData.operations.first())
+    OperationRow(operation = PreviewData.operations.first())
 }
