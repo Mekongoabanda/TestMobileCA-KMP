@@ -1,3 +1,28 @@
+package com.example.testmobileca_kmp.modules.account.data.datasources
+
+import com.example.testmobileca_kmp.modules.account.data.models.BankDTO
+import com.example.testmobileca_kmp.modules.account.domain.entities.Bank
+import kotlinx.serialization.json.Json
+
+object LocalBankDataSource {
+
+    private val json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+    }
+
+    fun fetchBanks(): Result<List<Bank>> {
+        return try {
+            val bankDTOs: List<BankDTO> = json.decodeFromString(BANKS_JSON)
+            Result.success(bankDTOs.map { it.toDomain() })
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+}
+
+private const val BANKS_JSON =
+        """
 [
     {
         "name": "CA Languedoc",
@@ -187,3 +212,4 @@
         ]
     }
 ]
+"""
