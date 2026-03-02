@@ -13,25 +13,25 @@ class GetSortedBanksUseCase(private val repository: BankRepositoryProtocol) {
         val banks = result.getOrNull() ?: emptyList()
 
         val sortedBanks =
-                banks
-                        .map { bank ->
-                            val sortedAccounts =
-                                    bank.accounts
-                                            .map { account ->
-                                                val sortedOperations =
-                                                        account.operations.sortedWith(
-                                                                compareByDescending<Operation> {
-                                                                    it.date
-                                                                }
-                                                                        .thenBy { it.title }
-                                                        )
-                                                account.copy(operations = sortedOperations)
-                                            }
-                                            .sortedBy { it.label }
+            banks
+                .map { bank ->
+                    val sortedAccounts =
+                        bank.accounts
+                            .map { account ->
+                                val sortedOperations =
+                                    account.operations.sortedWith(
+                                        compareByDescending<Operation> {
+                                            it.date
+                                        }
+                                            .thenBy { it.title }
+                                    )
+                                account.copy(operations = sortedOperations)
+                            }
+                            .sortedBy { it.label }
 
-                            bank.copy(accounts = sortedAccounts)
-                        }
-                        .sortedWith(compareByDescending<Bank> { it.isCA }.thenBy { it.name })
+                    bank.copy(accounts = sortedAccounts)
+                }
+                .sortedWith(compareByDescending<Bank> { it.isCA }.thenBy { it.name })
 
         return Result.success(sortedBanks)
     }

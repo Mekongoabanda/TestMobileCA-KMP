@@ -9,6 +9,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Instant as KtxInstant
 
 /**
  * Fake implementation of [BankRepositoryProtocol] for unit testing. Returns a configurable [Result]
@@ -23,34 +24,34 @@ class GetSortedBanksUseCaseTest {
     // region Test Data
 
     private val opB =
-            Operation(
-                    id = "1",
-                    title = "Achat Boulangerie",
-                    amount = "-3,50 €",
-                    date = KtxInstant.fromEpochSeconds(1644870000),
-                    category = OperationCategory.FOOD
-            )
+        Operation(
+            id = "1",
+            title = "Achat Boulangerie",
+            amount = "-3,50 €",
+            date = KtxInstant.fromEpochSeconds(1644870000),
+            category = OperationCategory.FOOD
+        )
     private val opA =
-            Operation(
-                    id = "2",
-                    title = "Netflix",
-                    amount = "-15,99 €",
-                    date = KtxInstant.fromEpochSeconds(1645300000),
-                    category = OperationCategory.LEISURE
-            )
+        Operation(
+            id = "2",
+            title = "Netflix",
+            amount = "-15,99 €",
+            date = KtxInstant.fromEpochSeconds(1645300000),
+            category = OperationCategory.LEISURE
+        )
     private val opC =
-            Operation(
-                    id = "3",
-                    title = "Spotify",
-                    amount = "-9,99 €",
-                    date = KtxInstant.fromEpochSeconds(1645300000),
-                    category = OperationCategory.LEISURE
-            )
+        Operation(
+            id = "3",
+            title = "Spotify",
+            amount = "-9,99 €",
+            date = KtxInstant.fromEpochSeconds(1645300000),
+            category = OperationCategory.LEISURE
+        )
 
     private val accountZ =
-            Account("1", 1, "Yannick", 1, "111", "Livret A", "02", 15000.0, listOf(opB, opA))
+        Account("1", 1, "Yannick", 1, "111", "Livret A", "02", 15000.0, listOf(opB, opA))
     private val accountA =
-            Account("2", 2, "Yannick", 1, "222", "Compte courant", "01", 2031.84, listOf(opC))
+        Account("2", 2, "Yannick", 1, "222", "Compte courant", "01", 2031.84, listOf(opC))
 
     private val bnp = Bank("BNP Paribas", false, listOf(accountZ, accountA))
     private val ca = Bank("Crédit Agricole", true, listOf(accountZ))

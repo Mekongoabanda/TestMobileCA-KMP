@@ -11,7 +11,7 @@ import io.ktor.client.request.get
 class BankRepositoryImpl : BankRepositoryProtocol {
 
     private val apiUrl =
-            "https://cdf-test-mobile-default-rtdb.europe-west1.firebasedatabase.app/banks.json"
+        "https://cdf-test-mobile-default-rtdb.europe-west1.firebasedatabase.app/banks.json"
 
     override suspend fun fetchBanks(): Result<List<Bank>> {
         return try {

@@ -22,7 +22,7 @@ object LocalBankDataSource {
 }
 
 private const val BANKS_JSON =
-        """
+    """
 [
     {
         "name": "CA Languedoc",

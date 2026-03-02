@@ -16,9 +16,11 @@ import com.example.testmobileca_kmp.modules.account.domain.entities.Bank
 
 @Composable
 fun BankRow(bank: Bank, modifier: Modifier = Modifier) {
-    Row(modifier = modifier
-        .padding(vertical = 4.dp)
-        .background(Color.White)) {
+    Row(
+        modifier = modifier
+            .padding(vertical = 4.dp)
+            .background(Color.White)
+    ) {
         Text(
             text = bank.name,
             style = MaterialTheme.typography.bodyMedium,
