@@ -8,7 +8,9 @@ object AppColors {
 
     // Text
     val bankAccountTitle = Color(0xFF3C3C43)
-    val bankAccountAmount = Color(0xFF1C1C1E)
+    val bankAccountAmount = Color(0xFF000000)
+    val operationAmount = Color(0xFFD0D0D0)
+
     val accountTitle = Color(0xFF3C3C43) // Consistent with bank title
 
     // Section

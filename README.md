@@ -1,24 +1,35 @@
 # 🏦 TestMobileCA — Kotlin Multiplatform (KMP)
 
-Application mobile **bancaire multiplateforme** (Android & iOS) développée en **Kotlin Multiplatform** avec une architecture **Clean Architecture**.
+> 🇫🇷 [Lire en français](README_FR.md)
 
-> **Contexte** : Test technique Crédit Agricole — Développer une application mobile affichant une liste de banques, comptes et opérations depuis une API REST, avec un tri spécifique (banques CA en premier), un **mode offline** (fallback JSON local), et une architecture **propre et testable**.
+A cross-platform **banking mobile app** (Android & iOS) built with **Kotlin Multiplatform** following a **Clean Architecture** approach.
 
----
-
-## 📋 Règles métier
-
-| Règle                  | Description                                                                                   |
-| ---------------------- | --------------------------------------------------------------------------------------------- |
-| **Tri des banques**    | Banques Crédit Agricole (`isCA = true`) affichées en premier, puis les autres, triées par nom |
-| **Tri des comptes**    | Par label alphabétique                                                                        |
-| **Tri des opérations** | Par date décroissante, puis par titre alphabétique                                            |
-| **Mode offline**       | Si l'API échoue → fallback sur le JSON local embarqué (données toujours visibles)             |
-| **Séparation UI**      | UI native sur chaque plateforme (Jetpack Compose / SwiftUI), logique partagée en Kotlin       |
+> **Context**: Technical assessment — Build a mobile application that displays a list of banks, accounts, and operations from a REST API, with specific sorting (CA banks first), an **offline mode** (local JSON fallback), and a **clean, testable architecture**.
 
 ---
 
-## 🏗️ Architecture High-Level
+## 📋 Business Rules
+
+| Rule                  | Description                                                                             |
+| --------------------- | --------------------------------------------------------------------------------------- |
+| **Bank sorting**      | Crédit Agricole banks (`isCA = true`) displayed first, then others, sorted by name      |
+| **Account sorting**   | Alphabetical by label                                                                   |
+| **Operation sorting** | By date descending, then by title alphabetically                                        |
+| **Offline mode**      | If the API fails → fallback to embedded local JSON (data always visible)                |
+| **UI separation**     | Native UI on each platform (Jetpack Compose / SwiftUI), shared business logic in Kotlin |
+
+---
+
+## 📸 Screenshots
+
+|                      Android                      |                     iOS                      |
+| :-----------------------------------------------: | :------------------------------------------: |
+| ![Accounts](screenshots/android_account_tab.png)  | ![Accounts](screenshots/iOS_account_tab.png) |
+| ![Operations](screenshots/android_operations.png) | ![Operations](screenshots/iOS_operation.png) |
+
+---
+
+## 🏗️ High-Level Architecture
 
 ```mermaid
 graph TB
@@ -73,7 +84,7 @@ graph TB
 
 ---
 
-## 🧩 Clean Architecture — Couches
+## 🧩 Clean Architecture — Layers
 
 ```mermaid
 graph LR
@@ -107,39 +118,39 @@ graph LR
 
 ---
 
-## 🛠 Choix techniques — Pourquoi ?
+## 🛠 Technical Choices — Why?
 
-### 1. **Kotlin Multiplatform (KMP)** — au lieu de Flutter / React Native
+### 1. **Kotlin Multiplatform (KMP)** — Required for this assessment
 
-| Pourquoi KMP                    | Détail                                                                                              |
-| ------------------------------- | --------------------------------------------------------------------------------------------------- |
-| **UI native**                   | Jetpack Compose (Android) et SwiftUI (iOS), pas de couche UI abstraite → performances et UX natives |
-| **Logique partagée uniquement** | ViewModel, UseCases, DTOs, networking → écrits une seule fois en Kotlin                             |
-| **Interop native**              | Accès direct aux APIs plateforme (CoreData, Android Jetpack...) sans bridge                         |
-| **Adoption progressive**        | Pas de réécriture totale — on peut ajouter KMP à un projet existant                                 |
+| KMP                      | Details                                                                                       |
+| ------------------------ | --------------------------------------------------------------------------------------------- |
+| **Native UI**            | Jetpack Compose (Android) and SwiftUI (iOS), no abstract UI layer → native performance and UX |
+| **Shared logic only**    | ViewModel, UseCases, DTOs, networking → written once in Kotlin                                |
+| **Native interop**       | Direct access to platform APIs (CoreData, Android Jetpack...) without a bridge                |
+| **Progressive adoption** | No full rewrite needed — KMP can be added to an existing project                              |
 
 ### 2. **SKIE** — Swift ↔ Kotlin Interop
 
-> Problème : Les `StateFlow` Kotlin ne sont pas natifs en Swift. Sans SKIE, il faudrait écrire un `Collector` Kotlin manuellement, et les `sealed class` ne sont pas des `enum Swift`.
+> Without SKIE, Kotlin `StateFlow` isn't natively consumable in Swift. I would have to write a custom Kotlin `Collector`, and `sealed class` wouldn't map to Swift `enum`.
 
-| Ce que fait SKIE              | Impact                                                         |
-| ----------------------------- | -------------------------------------------------------------- |
-| `StateFlow` → `AsyncSequence` | `for await newState in viewModel.viewState` — code Swift natif |
-| `sealed class` → Swift `enum` | `switch onEnum(of: state)` avec pattern matching complet       |
-| Élimine le boilerplate        | Pas besoin de wrapper Kotlin `FlowCollector`                   |
+| What SKIE does                | Impact                                                     |
+| ----------------------------- | ---------------------------------------------------------- |
+| `StateFlow` → `AsyncSequence` | `for await newState in viewModel.viewState` — native Swift |
+| `sealed class` → Swift `enum` | `switch onEnum(of: state)` with full pattern matching      |
+| Eliminates boilerplate        | No need for a Kotlin `FlowCollector` wrapper               |
 
-### 3. **Koin** — Injection de dépendances
+### 3. **Koin** — Dependency Injection
 
-> Pourquoi Koin et pas Dagger/Hilt ?
+> I chose Koin over Dagger/Hilt because it's the only DI framework that works natively with KMP across both platforms.
 
-| Koin                                   | Dagger/Hilt                            |
-| -------------------------------------- | -------------------------------------- |
-| ✅ KMP compatible (multiplateforme)    | ❌ Android only (annotation processor) |
-| ✅ DSL Kotlin natif, pas d'annotations | ❌ Génération de code, kapt/ksp        |
-| ✅ Légère, rapide à configurer         | ❌ Lourd, courbe d'apprentissage       |
+| Koin                                 | Dagger/Hilt                            |
+| ------------------------------------ | -------------------------------------- |
+| ✅ KMP compatible (multiplatform)    | ❌ Android only (annotation processor) |
+| ✅ Native Kotlin DSL, no annotations | ❌ Code generation, kapt/ksp           |
+| ✅ Lightweight, quick to set up      | ❌ Heavy, steep learning curve         |
 
 ```kotlin
-// Koin — Déclaration en 5 lignes
+// Koin — Declared in just 5 lines
 val sharedModule = module {
     single<BankRepositoryProtocol> { BankRepositoryImpl() }
     factory { GetSortedBanksUseCase(get()) }
@@ -149,114 +160,45 @@ val sharedModule = module {
 
 ### 4. **Ktor** — HTTP Client
 
-> Pourquoi Ktor et pas Retrofit ?
+> Retrofit doesn't support iOS. Ktor is the natural choice for KMP — it provides a platform-specific engine for each target.
 
-| Ktor                                                      | Retrofit                   |
-| --------------------------------------------------------- | -------------------------- |
-| ✅ KMP natif (iOS + Android)                              | ❌ Android only (OkHttp)   |
-| ✅ Moteur par plateforme (`OkHttp` Android, `Darwin` iOS) | ❌ Pas de moteur iOS       |
-| ✅ `kotlinx.serialization` intégré                        | ⚠️ Nécessite Gson ou Moshi |
+| Ktor                                                         | Retrofit                  |
+| ------------------------------------------------------------ | ------------------------- |
+| ✅ KMP native (iOS + Android)                                | ❌ Android only (OkHttp)  |
+| ✅ Platform-specific engine (`OkHttp` Android, `Darwin` iOS) | ❌ No iOS engine          |
+| ✅ Built-in `kotlinx.serialization`                          | ⚠️ Requires Gson or Moshi |
 
-### 5. **Ktlint** — Linter Kotlin (au lieu de Detekt)
+### 5. **Ktlint & SwiftLint** — Linting
 
-> Pourquoi pas Detekt ?
+I set up linting on both platforms to ensure consistent code style:
 
-| Ktlint                                         | Detekt                                              |
-| ---------------------------------------------- | --------------------------------------------------- |
-| ✅ Focus **style/formatage** (comme SwiftLint) | ❌ Analyse statique → trop de faux positifs Compose |
-| ✅ Auto-fix (`ktlintFormat`)                   | ❌ Pas d'auto-fix natif                             |
-| ✅ Config via `.editorconfig` (standard)       | ❌ Config YAML custom                               |
-| ✅ Rapide, léger                               | ⚠️ Plus lourd, plus configurable                    |
+- **Ktlint** (Kotlin): configured via `.editorconfig`, auto-fixable with `./gradlew ktlintFormat`
+- **SwiftLint** (Swift): configured via `.swiftlint.yml`, enforced in CI with `--strict`
 
-**Detekt a été initialement configuré puis retiré** car il générait de nombreux faux positifs sur le code Compose (fonctions longues, noms de fonctions Composable en PascalCase, wildcard imports...).
+### 6. **Offline mode — Embedded JSON**
 
-### 6. **SwiftLint** — Linter Swift
-
-Même philosophie que Ktlint côté iOS :
-
-- Config via `.swiftlint.yml`
-- Appliqué en CI avec `--strict` (warnings → errors)
-- Règles adaptées au projet (vertical whitespace, line length 120, type naming...)
-
-### 7. **Mode offline — JSON embarqué**
-
-> Pourquoi ne pas utiliser `expect/actual` ou `Room` ?
-
-| Approche choisie                                  | Alternatives rejetées                                                                     |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| ✅ JSON embarqué en `const val` dans `commonMain` | ❌ `expect/actual` : nécessite assets Android + Bundle iOS (2 fichiers platform-specific) |
-| ✅ 0 dépendance supplémentaire                    | ❌ Room/SQLite : overkill pour du cache statique                                          |
-| ✅ Fonctionne immédiatement sur iOS ET Android    | ❌ Compose Resources : non disponible dans le module `shared`                             |
+> For this assessment, I kept it simple with an embedded JSON constant. In a production app, I would implement proper data persistence with Room/SQLDelight or a caching layer.
 
 ```kotlin
-// BankRepositoryImpl — Fallback transparent
+// BankRepositoryImpl — Transparent fallback
 catch (e: Exception) {
-    LocalBankDataSource.fetchBanks() // → données locales
+    LocalBankDataSource.fetchBanks() // → local data
 }
-```
-
----
-
-## 📁 Structure du projet
-
-```
-TestMobileCAKMP/
-├── shared/                          # 🔗 Module partagé (KMP)
-│   └── src/commonMain/kotlin/
-│       ├── core/
-│       │   ├── di/Koin.kt          # Injection de dépendances
-│       │   └── network/NetworkManager.kt
-│       └── modules/account/
-│           ├── data/
-│           │   ├── datasources/LocalBankDataSource.kt  # Offline fallback
-│           │   ├── models/          # DTOs (BankDTO, AccountDTO, OperationDTO)
-│           │   └── repositories/BankRepositoryImpl.kt
-│           ├── domain/
-│           │   ├── entities/        # Bank, Account, Operation, OperationCategory
-│           │   ├── interfaces/BankRepositoryProtocol.kt
-│           │   └── usecases/GetSortedBanksUseCase.kt
-│           └── presentation/
-│               └── viewmodels/BanksListViewModel.kt
-│
-├── composeApp/                      # 📱 Android (Jetpack Compose)
-│   └── src/androidMain/kotlin/
-│       ├── core/
-│       │   ├── navigation/          # AppNavHost, AppBottomBar, AppTab
-│       │   ├── theme/               # Color, Theme, Typography
-│       │   ├── preview/PreviewData.kt
-│       │   └── utils/CurrencyUtils.kt
-│       └── modules/account/presentation/
-│           ├── banksList/           # BanksListScreen, BankRow, AccountRow, etc.
-│           └── operationsList/      # OperationsListScreen, OperationRow
-│
-├── iosApp/                          # 🍎 iOS (SwiftUI)
-│   └── iosApp/
-│       ├── ContentView.swift        # TabBar + navigation
-│       ├── iOSApp.swift             # Entry point + Koin init
-│       ├── core/extensions/KMPExtensions.swift  # Identifiable conformance
-│       └── modules/acccount/presentation/
-│           ├── banksList/           # BanksListView, BankRow, AccountRow
-│           └── operationsList/      # OperationsListView, OperationsRow
-│
-├── .github/workflows/ci.yml        # 🔄 CI Pipeline
-├── .editorconfig                    # Ktlint config
-├── .swiftlint.yml                   # SwiftLint config
-└── build.gradle.kts                 # Root + Ktlint plugin
 ```
 
 ---
 
 ## 🧪 Tests & CI
 
-### Tests unitaires (`shared/src/commonTest/`)
+### Unit tests (`shared/src/commonTest/`)
 
-| Test                        | Couverture                                                                    |
+| Test                        | Coverage                                                                      |
 | --------------------------- | ----------------------------------------------------------------------------- |
-| `OperationCategoryTest`     | `fromString()` — valeurs valides, invalides, null                             |
-| `OperationDTOTest`          | Mapping DTO → domaine                                                         |
+| `OperationCategoryTest`     | `fromString()` — valid, invalid, and null values                              |
+| `OperationDTOTest`          | DTO → domain mapping                                                          |
 | `BankDTOTest`               | `isCA` int→bool, nested structures                                            |
-| `GetSortedBanksUseCaseTest` | Tri CA-first, comptes par label, opérations par date desc, erreur, liste vide |
-| `LocalBankDataSourceTest`   | Parsing JSON embarqué, 4 banques, CA/autres, comptes, opérations              |
+| `GetSortedBanksUseCaseTest` | CA-first sort, accounts by label, operations by date desc, error, empty lists |
+| `LocalBankDataSourceTest`   | Embedded JSON parsing, 4 banks, CA/others, accounts, operations               |
 
 ### CI Pipeline (GitHub Actions)
 
@@ -273,55 +215,25 @@ push / PR → main, develop
 
 ---
 
-## ⚠️ Difficultés rencontrées & solutions
+## ⚠️ Challenges & Solutions
 
-### 1. `LazyColumn` — Clés dupliquées
+### 1. SwiftLint `sorted_imports` — Inconsistent ordering
 
-> **Problème** : `java.lang.IllegalArgumentException: Key "2" was already used` — crash au runtime car les IDs d'opérations ne sont pas uniques dans l'API.
+> **Problem**: SwiftLint's `sorted_imports` rule sorted differently between my local machine and the CI runner (different macOS locales). No import order worked everywhere.
 
-**Solution** : Utilisation d'un UUID composite comme clé dans la `LazyColumn` au lieu de la simple `id` de l'opération. Chaque item est identifié de façon unique par sa position dans la liste.
+**Solution**: Removed `sorted_imports` from `.swiftlint.yml`. Other rules (whitespace, naming, line length) remain active.
 
-### 2. Detekt → Ktlint
+### 2. SKIE — Bridging `StateFlow` and `sealed class`
 
-> **Problème** : Detekt générait des **faux positifs massifs** sur le code Compose :
->
-> - `FunctionNaming` : les Composables sont en PascalCase (`@Composable fun BankRow()`)
-> - `LongMethod` : les fonctions Compose modernes dépassent facilement les seuils
-> - `WildcardImport` : Compose utilise `import androidx.compose.material3.*`
-> - `MagicNumber` : Les paddings/sizes sont des constantes visuelles, pas des magic numbers
+> **Problem**: Without SKIE, consuming a `StateFlow<BanksListState>` in Swift requires a custom Kotlin `Collector`, a manual `ObservableObject` wrapper, and the `sealed class` is seen as a class hierarchy rather than an `enum`.
 
-**Solution** : Remplacement par **Ktlint** — focus formatage uniquement, pas d'analyse sémantique. Configuration via `.editorconfig` avec les règles désactivées qui conflictuent :
-
-```ini
-# Compose utilise des wildcard imports
-ktlint_standard_no-wildcard-imports = disabled
-# Compose : fonctions PascalCase dans les tests et previews
-ktlint_standard_function-naming = disabled
-# Package avec underscore (testmobileca_kmp)
-ktlint_standard_package-name = disabled
-```
-
-### 3. SwiftLint `sorted_imports` — Ordre inconsistant
-
-> **Problème** : SwiftLint exigeait un tri des imports (`sorted_imports`) mais le tri variait entre l'environnement local et CI (macOS runner vs locale différente). Impossible de trouver un ordre accepté partout.
-
-**Solution** : Retrait de la règle `sorted_imports` de `.swiftlint.yml`. Les autres règles (whitespace, naming, line length) restent actives.
-
-### 4. SKIE — Bridging `StateFlow` et `sealed class`
-
-> **Problème** : Sans SKIE, consommer un `StateFlow<BanksListState>` côté Swift nécessite :
->
-> 1. Un `Collector` Kotlin custom
-> 2. Un `ObservableObject` wrapper avec dispatch manuels
-> 3. La `sealed class` est vue comme une hiérarchie de classes, pas un `enum`
-
-**Solution** : Le plugin SKIE transforme automatiquement :
+**Solution**: The SKIE plugin handles this automatically:
 
 ```swift
-// Avant SKIE (boilerplate lourd)
-viewModel.viewState.collect { state in ... } // Ne compile pas
+// Without SKIE (heavy boilerplate)
+viewModel.viewState.collect { state in ... } // Doesn't compile
 
-// Avec SKIE — code natif Swift
+// With SKIE — native Swift code
 for await newState in viewModel.viewState { self.state = newState }
 switch onEnum(of: viewModel.state) {
     case .loading: ...
@@ -329,18 +241,6 @@ switch onEnum(of: viewModel.state) {
     case .failure(let f): ...
 }
 ```
-
-### 5. `compose-material-icons-extended` — Erreur de résolution
-
-> **Problème** : `Could not find org.jetbrains.compose.material:material-icons-extended:1.10.1` — la dépendance Compose Multiplatform n'inclut pas `material-icons-extended`.
-
-**Solution** : Utilisation de la dépendance AndroidX directe (`androidx.compose.material:material-icons-extended`) au lieu de la version Compose Multiplatform.
-
-### 6. Configuration Cache Gradle — `MapSourceSetPathsTask`
-
-> **Problème** : `Configuration cache state could not be cached: field __librarySourceSets__` — incompatibilité entre le cache de configuration Gradle et certaines tâches Android.
-
-**Solution** : Le problème est résolu automatiquement lors du clean build. Pas d'impact fonctionnel.
 
 ---
 
@@ -354,7 +254,7 @@ switch onEnum(of: viewModel.state) {
 
 ### iOS
 
-Ouvrir `iosApp/` dans Xcode → Run sur simulateur ou device.
+Open `iosApp/` in Xcode → Run on simulator or device.
 
 ### Tests
 
@@ -366,8 +266,8 @@ Ouvrir `iosApp/` dans Xcode → Run sur simulateur ou device.
 
 ```bash
 # Kotlin
-./gradlew ktlintCheck          # Vérifier
-./gradlew ktlintFormat         # Auto-corriger
+./gradlew ktlintCheck          # Check
+./gradlew ktlintFormat         # Auto-fix
 
 # Swift
 swiftlint lint --config .swiftlint.yml --strict
@@ -375,16 +275,24 @@ swiftlint lint --config .swiftlint.yml --strict
 
 ---
 
-## 📦 Stack technique
+## 💡 Possible Improvements
 
-| Technologie           | Version | Usage                                     |
+- **Shared Design Tokens**: Colors, font sizes, and spacing constants could be defined in `shared/commonMain` (e.g., `AppColors`, `AppFonts`) so both platforms consume the same values. Currently, each platform defines its own design system (`MaterialTheme` on Android, SwiftUI assets on iOS), which means a color change requires two edits. Shared Kotlin constants (`Long` hex values, `Int` sizes) would centralize this — each platform would just map them to their native types (`Color(0xFF...)` on Android, `Color(hex:)` on iOS).
+- **Data Persistence**: Replace the embedded JSON fallback with Room/SQLDelight for proper offline caching with fresh API data.
+- **ViewModel Tests**: Add unit tests for `BanksListViewModel` by mocking `GetSortedBanksUseCase`.
+
+---
+
+## 📦 Tech Stack
+
+| Technology            | Version | Usage                                     |
 | --------------------- | ------- | ----------------------------------------- |
-| Kotlin                | 2.3.10  | Langage principal (shared + Android)      |
-| Compose Multiplatform | 1.10.1  | UI Android                                |
-| SwiftUI               | —       | UI iOS                                    |
-| Ktor                  | 3.4.0   | HTTP Client (multiplateforme)             |
+| Kotlin                | 2.3.10  | Main language (shared + Android)          |
+| Compose Multiplatform | 1.10.1  | Android UI                                |
+| SwiftUI               | —       | iOS UI                                    |
+| Ktor                  | 3.4.0   | HTTP Client (multiplatform)               |
 | kotlinx.serialization | 1.10.0  | JSON parsing                              |
-| Koin                  | 4.1.1   | Dependency Injection (multiplateforme)    |
+| Koin                  | 4.1.1   | Dependency Injection (multiplatform)      |
 | SKIE                  | 0.10.10 | Swift interop (StateFlow → AsyncSequence) |
 | Ktlint                | 12.1.2  | Kotlin linter                             |
 | SwiftLint             | —       | Swift linter                              |

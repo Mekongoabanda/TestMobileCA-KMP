@@ -31,7 +31,7 @@ fun App() {
                         title = {
                             Text(
                                 text = stringResource(currentTab.labelResId),
-                                style = MaterialTheme.typography.headlineMedium
+                                style = MaterialTheme.typography.headlineLarge
                             )
                         },
                         colors =

@@ -18,24 +18,17 @@ struct OperationsRow: View {
                     .font(.subheadline)
                     .foregroundStyle(.bankAccountTitle)
                     .bold()
-                Text(operation.date)  // Date is already a String in the Domain Entity!
+                Text(operation.formattedDate)
                     .font(.caption)
                     .foregroundColor(.bankAccountTitle)
             }
 
             Spacer()
 
-            Text(operation.amount)  // Amount is already a formatted String in the Domain Entity!
+            Text(operation.amount)
                 .font(.subheadline)
                 .foregroundColor(.bankAccountAmount)
         }
         .padding(.vertical, 4)
     }
-}
-
-#Preview {
-    OperationsRow(
-        operation: shared.Operation(
-            id: "2", title: "Prélèvement Netflix", amount: "-15.99", date: "20/02/2026",
-            category: OperationCategory.leisure))
 }

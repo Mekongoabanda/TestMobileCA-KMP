@@ -104,7 +104,7 @@ private fun SectionHeader(title: Int, iconColor: Color) {
 private fun ExpandableBankRow(bank: Bank, onAccountClick: (Account) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
-    Column {
+    Column(modifier = Modifier.background(Color.White)) {
         Row(
             modifier =
             Modifier.fillMaxWidth()

@@ -23,14 +23,34 @@ class GetSortedBanksUseCaseTest {
     // region Test Data
 
     private val opB =
-        Operation("1", "Achat Boulangerie", "-3,50 €", "15/02/2026", OperationCategory.FOOD)
-    private val opA = Operation("2", "Netflix", "-15,99 €", "20/02/2026", OperationCategory.LEISURE)
-    private val opC = Operation("3", "Spotify", "-9,99 €", "20/02/2026", OperationCategory.LEISURE)
+            Operation(
+                    id = "1",
+                    title = "Achat Boulangerie",
+                    amount = "-3,50 €",
+                    date = KtxInstant.fromEpochSeconds(1644870000),
+                    category = OperationCategory.FOOD
+            )
+    private val opA =
+            Operation(
+                    id = "2",
+                    title = "Netflix",
+                    amount = "-15,99 €",
+                    date = KtxInstant.fromEpochSeconds(1645300000),
+                    category = OperationCategory.LEISURE
+            )
+    private val opC =
+            Operation(
+                    id = "3",
+                    title = "Spotify",
+                    amount = "-9,99 €",
+                    date = KtxInstant.fromEpochSeconds(1645300000),
+                    category = OperationCategory.LEISURE
+            )
 
     private val accountZ =
-        Account("1", 1, "Yannick", 1, "111", "Livret A", "02", 15000.0, listOf(opB, opA))
+            Account("1", 1, "Yannick", 1, "111", "Livret A", "02", 15000.0, listOf(opB, opA))
     private val accountA =
-        Account("2", 2, "Yannick", 1, "222", "Compte courant", "01", 2031.84, listOf(opC))
+            Account("2", 2, "Yannick", 1, "222", "Compte courant", "01", 2031.84, listOf(opC))
 
     private val bnp = Bank("BNP Paribas", false, listOf(accountZ, accountA))
     private val ca = Bank("Crédit Agricole", true, listOf(accountZ))
@@ -63,20 +83,20 @@ class GetSortedBanksUseCaseTest {
 
     @Test
     fun `operations are sorted by date descending then title ascending`() = runTest {
-        // accountZ has: opB (15/02) and opA (20/02)
-        // Expected after sort: opA (20/02) before opB (15/02) — date desc
+        // opB (epoch 1644870000) < opA (epoch 1645300000)
+        // Expected: opA first (more recent)
         val useCase = GetSortedBanksUseCase(FakeBankRepository(Result.success(listOf(ca))))
 
         val result = useCase.execute()
         val operations = result.getOrThrow().first().accounts.first().operations
 
-        assertEquals("Netflix", operations[0].title) // 20/02 > 15/02
+        assertEquals("Netflix", operations[0].title)
         assertEquals("Achat Boulangerie", operations[1].title)
     }
 
     @Test
     fun `operations with same date are sorted by title ascending`() = runTest {
-        // opA (Netflix, 20/02) and opC (Spotify, 20/02) — same date
+        // opA (Netflix) and opC (Spotify) — same Instant
         val account = Account("1", 1, "Y", 1, "111", "Compte", "01", 100.0, listOf(opC, opA))
         val bank = Bank("Test", true, listOf(account))
         val useCase = GetSortedBanksUseCase(FakeBankRepository(Result.success(listOf(bank))))
@@ -84,7 +104,7 @@ class GetSortedBanksUseCaseTest {
         val result = useCase.execute()
         val operations = result.getOrThrow().first().accounts.first().operations
 
-        assertEquals("Netflix", operations[0].title) // N < S alphabetically
+        assertEquals("Netflix", operations[0].title) // N < S
         assertEquals("Spotify", operations[1].title)
     }
 

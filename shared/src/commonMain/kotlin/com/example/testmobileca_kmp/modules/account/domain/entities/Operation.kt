@@ -1,5 +1,8 @@
 package com.example.testmobileca_kmp.modules.account.domain.entities
 
+import com.example.testmobileca_kmp.core.extensions.toFormattedDate
+import kotlinx.datetime.Instant as KtxInstant
+
 enum class OperationCategory(val value: String) {
         LEISURE("leisure"),
         ONLINE("online"),
@@ -20,6 +23,9 @@ data class Operation(
         val id: String,
         val title: String,
         val amount: String,
-        val date: String,
+        val date: KtxInstant,
         val category: OperationCategory
-)
+) {
+        val formattedDate: String
+                get() = date.toFormattedDate()
+}

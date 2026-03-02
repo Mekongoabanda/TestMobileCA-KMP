@@ -11,6 +11,7 @@ struct ContentView: View {
             // 2
             upToYouTab().tag(2)
         }
+        .tint(Color(.caGreen))
     }
 
     @ViewBuilder
